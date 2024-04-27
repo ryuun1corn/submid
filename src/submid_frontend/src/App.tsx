@@ -15,6 +15,7 @@ import {
   HoverCardTrigger,
   HoverCardContent,
 } from "@/components/ui/hover-card";
+import { ModeToggle } from "@/components/mode-toggle";
 
 function App() {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
@@ -49,10 +50,17 @@ function App() {
   }, [setPrincipal]);
 
   return (
-    <main className="min-h-screen bg-slate-400 flex flex-col items-center justify-center gap-5">
-      <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl text-white">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center gap-5">
+      <div className="absolute top-10 right-10">
+        <ModeToggle />
+      </div>
+      <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
         SubmiD
       </h1>
+      <p className="max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400 text-center">
+        Secure, Decentralized, and Intuitive Form on the Blockchain. <br />
+        Effortlessly build and share forms for any purpose.
+      </p>
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Call yourself</CardTitle>
@@ -72,7 +80,7 @@ function App() {
               name="name"
               alt="Name"
               type="text"
-              className="border-[2px] rounded-md p-2"
+              className="border-[2px] rounded-md p-2 dark:text-black"
             />
             <Button type="submit">Click me!</Button>
             <section id="greeting">{greeting}</section>
