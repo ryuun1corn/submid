@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { submid_backend } from "../../declarations/submid_backend";
 import {
   Card,
@@ -8,14 +8,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "./components/ui/button";
+import { getPrincipalText, isAuthenticated, login, logout } from "./lib/auth";
+import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from "@/components/ui/hover-card";
 
 function App() {
+  const [authenticated, setAuthenticated] = useState<boolean>(false);
+  const [principal, setPrincipal] = useState<string>("");
   const [greeting, setGreeting] = useState<string>("");
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
-    // Assuming you have a form field with name="name", you can extract its value like this:
     const name = formData.get("name") as string;
 
     submid_backend.greet(name).then((greeting: string) => {
@@ -23,6 +31,22 @@ function App() {
     });
     return false;
   }
+
+  useEffect(() => {
+    const getAuth = async () => {
+      setAuthenticated(await isAuthenticated());
+    };
+
+    getAuth();
+  }, [setAuthenticated]);
+
+  useEffect(() => {
+    const getData = async () => {
+      setPrincipal(await getPrincipalText());
+    };
+
+    getData();
+  }, [setPrincipal]);
 
   return (
     <main className="min-h-screen bg-slate-400 flex flex-col items-center justify-center gap-5">
@@ -48,13 +72,36 @@ function App() {
               name="name"
               alt="Name"
               type="text"
-              className="border-[2px] rounded-md"
+              className="border-[2px] rounded-md p-2"
             />
-            <button type="submit">Click Me!</button>
+            <Button type="submit">Click me!</Button>
+            <section id="greeting">{greeting}</section>
           </form>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <section id="greeting">{greeting}</section>
+          <HoverCard>
+            <HoverCardTrigger asChild>
+              <Button variant="link">Show Principal</Button>
+            </HoverCardTrigger>
+            <HoverCardContent className="">
+              <div className="flex justify-between space-x-4">
+                <div className="space-y-1">
+                  <h4 className="text-sm font-semibold">Your Principal:</h4>
+                  <p className="text-sm">{principal}</p>
+                </div>
+              </div>
+            </HoverCardContent>
+          </HoverCard>
+
+          {authenticated ? (
+            <Button variant="destructive" onClick={logout}>
+              Logout
+            </Button>
+          ) : (
+            <Button variant="secondary" onClick={login}>
+              Login
+            </Button>
+          )}
         </CardFooter>
       </Card>
     </main>
