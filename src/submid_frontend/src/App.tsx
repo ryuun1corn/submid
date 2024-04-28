@@ -1,5 +1,5 @@
-import { FormEvent, useEffect, useState } from "react";
-import { submid_backend } from "../../declarations/submid_backend";
+import { FormEvent, useEffect, useState } from 'react';
+import { submid_backend } from '../../declarations/submid_backend';
 import {
   Card,
   CardContent,
@@ -7,25 +7,25 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "./components/ui/button";
-import { getPrincipalText, isAuthenticated, login, logout } from "./lib/auth";
+} from '@/components/ui/card';
+import { Button } from './components/ui/button';
+import { getPrincipalText, isAuthenticated, login, logout } from './lib/auth';
 import {
   HoverCard,
   HoverCardTrigger,
   HoverCardContent,
-} from "@/components/ui/hover-card";
-import { ModeToggle } from "@/components/mode-toggle";
+} from '@/components/ui/hover-card';
+import { ModeToggle } from '@/components/mode-toggle';
 
 function App() {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
-  const [principal, setPrincipal] = useState<string>("");
-  const [greeting, setGreeting] = useState<string>("");
+  const [principal, setPrincipal] = useState<string>('');
+  const [greeting, setGreeting] = useState<string>('');
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
-    const name = formData.get("name") as string;
+    const name = formData.get('name') as string;
 
     submid_backend.greet(name).then((greeting: string) => {
       setGreeting(greeting);

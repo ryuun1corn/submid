@@ -1,12 +1,12 @@
 /// <reference types="vitest" />
-import { fileURLToPath, URL } from "url";
-import react from "@vitejs/plugin-react";
-import { defineConfig } from "vite";
-import environment from "vite-plugin-environment";
-import dotenv from "dotenv";
-import path from "path";
+import { fileURLToPath, URL } from 'url';
+import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite';
+import environment from 'vite-plugin-environment';
+import dotenv from 'dotenv';
+import path from 'path';
 
-dotenv.config({ path: "../../.env" });
+dotenv.config({ path: '../../.env' });
 
 export default defineConfig({
   build: {
@@ -15,31 +15,31 @@ export default defineConfig({
   optimizeDeps: {
     esbuildOptions: {
       define: {
-        global: "globalThis",
+        global: 'globalThis',
       },
     },
   },
   server: {
     proxy: {
-      "/api": {
-        target: "http://127.0.0.1:8000",
+      '/api': {
+        target: 'http://127.0.0.1:8000',
         changeOrigin: true,
       },
     },
   },
   plugins: [
     react(),
-    environment("all", { prefix: "CANISTER_" }),
-    environment("all", { prefix: "DFX_" }),
+    environment('all', { prefix: 'CANISTER_' }),
+    environment('all', { prefix: 'DFX_' }),
   ],
   test: {
-    environment: "jsdom",
-    setupFiles: "src/setupTests.js",
+    environment: 'jsdom',
+    setupFiles: 'src/setupTests.js',
   },
   resolve: {
     alias: {
-      declarations: fileURLToPath(new URL("../declarations", import.meta.url)),
-      "@": path.resolve(__dirname, "./src"),
+      declarations: fileURLToPath(new URL('../declarations', import.meta.url)),
+      '@': path.resolve(__dirname, './src'),
     },
   },
 });

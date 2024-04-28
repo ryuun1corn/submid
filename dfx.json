@@ -20,12 +20,8 @@
       "wasm": ".azle/submid_backend/submid_backend.wasm"
     },
     "submid_frontend": {
-      "dependencies": [
-        "submid_backend"
-      ],
-      "source": [
-        "src/submid_frontend/dist"
-      ],
+      "dependencies": ["submid_backend"],
+      "source": ["src/submid_frontend/dist"],
       "type": "assets",
       "workspace": "submid_frontend"
     }

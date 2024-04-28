@@ -1,4 +1,4 @@
-import { AuthClient } from "@dfinity/auth-client";
+import { AuthClient } from '@dfinity/auth-client';
 
 // that is the url of the webapp for the internet identity.
 // The current URL is for testing purposes
