@@ -1,3 +1,11 @@
 service: () -> {
+    addForm: (record {keyAnswer:vec vec text; title:text; typeOfQuestion:vec text; contents:vec text; description:text; choice:vec vec text; answerType:vec bool; numberOfQuestion:nat64}) -> (variant {Ok:record {id:text; title:text; createdAt:nat64; user:principal; description:text; updateAt:nat64; numberOfQuestion:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}});
+    creatUser: (text) -> (variant {Fail:text; NotFound:text; Succes:text});
+    getAllForm: () -> (vec record {id:text; title:text; createdAt:nat64; user:principal; description:text; updateAt:nat64; numberOfQuestion:nat64}) query;
+    getAllUser: () -> (vec record {id:principal; userName:text; createdAt:nat64; listOfAnswer:vec record {id:text; title:text; createdAt:nat64; user:principal; updateAt:text; formId:text}; listOfForm:vec record {id:text; title:text; createdAt:nat64; user:principal; description:text; updateAt:nat64; numberOfQuestion:nat64}}) query;
+    getFormFromUser: (principal) -> (variant {Ok:vec record {id:text; title:text; createdAt:nat64; user:principal; description:text; updateAt:nat64; numberOfQuestion:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getFormWithId: (text) -> (variant {Ok:record {id:text; title:text; createdAt:nat64; user:principal; description:text; updateAt:nat64; numberOfQuestion:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getUserById: (principal) -> (variant {Ok:record {id:principal; userName:text; createdAt:nat64; listOfAnswer:vec record {id:text; title:text; createdAt:nat64; user:principal; updateAt:text; formId:text}; listOfForm:vec record {id:text; title:text; createdAt:nat64; user:principal; description:text; updateAt:nat64; numberOfQuestion:nat64}}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
     greet: (text) -> (text) query;
+    updateUserName: (record {id:principal; userName:text; createdAt:nat64; listOfAnswer:vec record {id:text; title:text; createdAt:nat64; user:principal; updateAt:text; formId:text}; listOfForm:vec record {id:text; title:text; createdAt:nat64; user:principal; description:text; updateAt:nat64; numberOfQuestion:nat64}}) -> (variant {Fail:text; NotFound:text; Succes:text});
 }
