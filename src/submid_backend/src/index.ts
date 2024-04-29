@@ -1,11 +1,13 @@
-import { content } from '@/src/submid_frontend/tailwind.config';
+// import { content } from '@/src/submid_frontend/tailwind.config';
+// import { response } from 'express';
+// import { object } from 'firebase-functions/v1/storage';
+// import { TypeOfExpression, sys } from 'typescript';
 import {
   Canister,
   query,
   ic,
   text,
   update,
-  Void,
   Principal,
   Variant,
   Err,
@@ -17,12 +19,10 @@ import {
   Vec,
   Result,
   int64,
+  Void,
   blob,
   nat,
 } from 'azle';
-import { response } from 'express';
-import { object } from 'firebase-functions/v1/storage';
-import { TypeOfExpression, sys } from 'typescript';
 import { v4 as uuidv4 } from 'uuid';
 
 const questionType = ['text', 'radio', 'select', 'none'];
@@ -62,7 +62,7 @@ type FormResponse = typeof FormResponse.tsType;
 const FormResponseAnswer = Record({
   id: text,
   index: nat64,
-  type: text,
+  answerType: text, // Ini tadi gw change jadi answerType soalnya kalo 'type' bikin error: tolong review han
   content: Vec(text),
   createdAt: nat64,
   updateAt: nat64,
@@ -277,7 +277,7 @@ export default Canister({
         let QuestionAnswer = {
           id: uuidv4(),
           index: BigInt(i),
-          type: question.Some?.typeOfQuestion || 'text',
+          answerType: question.Some?.typeOfQuestion || 'text',
           content: answers,
           createdAt: ic.time(),
           updateAt: ic.time(),
