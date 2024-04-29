@@ -102,7 +102,7 @@ const listOfKeyAnswer = StableBTreeMap<text, KeyAnswer>(6);
 
 let message = '';
 export default Canister({
-    // user
+    // Create new User
     createUser: update([text], Message, (name) => {
         let newUser = {
             id: ic.caller(),
@@ -115,6 +115,7 @@ export default Canister({
         return { Succes: "Success adding new user" }
     }),
 
+    // Update
     updateUser: update([User], Message, (user) => {
         const exist = listOfUser.get(user.id);
         if ("None" in exist)
@@ -124,10 +125,12 @@ export default Canister({
         return { Succes: "Success updating user" }
     }),
 
+    // get All User
     getAllUser: query([], Vec(User), () => {
         return listOfUser.values();
     }),
 
+    // Get User by id
     getUserById: query([Principal], Result(User, Message), (id) => {
         const user = listOfUser.get(id);
         if ("None" in user)
@@ -136,13 +139,12 @@ export default Canister({
         return Ok(user.Some);
     }),
 
-    // Create Form
-    //
+    // Get all Form
     getAllForm: query([], Vec(Form), () => {
         return listOfForm.values();
     }),
 
-    // 
+    // Create a New Form
     addForm: update([FormPayload], Result(Form, Message), (payload) => {
         if (typeof payload !== "object" || Object.keys(payload).length === 0) {
             return Err({ NotFound: "invalid payoad" })
@@ -192,7 +194,7 @@ export default Canister({
         return Ok(formRequest);
     }),
 
-    //
+    // Delete form with Id
     deleteFormWithId: update([text], Message, (id) => {
         let form = listOfForm.get(id);
         if ("None" in form)
@@ -229,7 +231,7 @@ export default Canister({
         return { Succes: "Success deleting a form" }
     }),
 
-    // 
+    // Get Form with Id
     getFormWithId: query([text], Result(Form, Message), (id) => {
         const formRequest = listOfForm.get(id);
         if ("None" in formRequest)
@@ -238,8 +240,8 @@ export default Canister({
         return Ok(formRequest.Some);
     }),
 
-    // 
-    getFormFromUser: query([Principal], Result(Vec(Form), Message), (id) => {
+    // Get All Form that have userId
+    getAllFormWithUserId: query([Principal], Result(Vec(Form), Message), (id) => {
         let user = listOfUser.get(id);
         if ("None" in user)
             return Err({ NotFound: `form with id=${id} not found` });
@@ -253,7 +255,8 @@ export default Canister({
         return Ok(forms);
     }),
 
-    getQuestionFromFormId: query([text], Result(Vec(Question), Message), (id) => {
+    // Get Question that it's Form Id
+    getQuestionWithFromId: query([text], Result(Vec(Question), Message), (id) => {
         const formRequest = listOfForm.get(id);
         if ("None" in formRequest)
             return Err({ NotFound: `form with id=${id} not found` });
@@ -268,8 +271,24 @@ export default Canister({
         return Ok(answer)
     }),
 
-    // Create an Answer
-    addAnswer: update([FormResponsePayload], Result(FormResponse, Message), (response) => {
+    // Get All Question Choice Form a Question using Id  
+    getAllQuestionChoiceWithQuestionId: query([text], Result(Vec(QuestionChoice), Message), (id) => {
+        const question = listOfQuestion.get(id);
+        if ("None" in question)
+            return Err({ NotFound: `question with id=${id} not found` });
+
+        let answer = new Array();
+        listOfQuestionChoice.values().map(questions => {
+            if (questions.questionId == questions.questionId) {
+                answer.push(question);
+            }
+        })
+
+        return Ok(answer)
+    }),
+
+    // Create Response of Form
+    addFormResponse: update([FormResponsePayload], Result(FormResponse, Message), (response) => {
         if (typeof response !== "object" || Object.keys(response).length === 0) {
             return Err({ NotFound: "invalid payoad" })
         }
@@ -303,7 +322,8 @@ export default Canister({
         return Ok(formResponse);
     }),
 
-    deleteAnswerFromUserId: update([text], Message, (id) => {
+    // Delete Form Response That have User Id
+    deleteFormResponseWithUserId: update([text], Message, (id) => {
         let form = listOfFormResponse.get(id);
         if ("None" in form)
             return { NotFound: `There is no answer response with id: ${id}` }
@@ -322,7 +342,8 @@ export default Canister({
         return { Succes: "Success deleting all answer response from a user" }
     }),
 
-    deleteAnswerWithId: update([text], Message, (id) => {
+    // Delete a Form Response with Id
+    deleteFormResponseWithId: update([text], Message, (id) => {
         let answer = listOfResponseAnswer.get(id);
         if ("None" in answer)
             return { NotFound: `There is no from with id: ${id}` }
@@ -337,7 +358,8 @@ export default Canister({
         return { Succes: "Success deleting an answer" }
     }),
 
-    getAnswerWithId: query([text], Result(FormResponse, Message), (id) => {
+    // Get Form Response with Id
+    getFormResponseWithId: query([text], Result(FormResponse, Message), (id) => {
         const formRequest = listOfFormResponse.get(id);
         if ("None" in formRequest)
             return Err({ NotFound: `answer with id=${id} not found` });
@@ -345,11 +367,13 @@ export default Canister({
         return Ok(formRequest.Some);
     }),
 
-    getAllAnswer: query([], Vec(FormResponse), () => {
+    // Get All Form Response
+    getAllFormResponse: query([], Vec(FormResponse), () => {
         return listOfFormResponse.values();
     }),
 
-    getAnswerFromUser: query([Principal], Result(Vec(FormResponse), Message), (id) => {
+    // Get All Form Response from user id
+    getAllFormResponseWithUserId: query([Principal], Result(Vec(FormResponse), Message), (id) => {
         let user = listOfUser.get(id);
         if ("None" in user)
             return Err({ NotFound: `answer with id=${id} not found` });
@@ -364,7 +388,8 @@ export default Canister({
         return Ok(answers);
     }),
 
-    getAnswerWithFormId: query([text], Result(Vec(FormResponse), Message), (id) => {
+    // Get All Form Response from a Form id
+    getAllFormResponseWithFormId: query([text], Result(Vec(FormResponse), Message), (id) => {
         let user = listOfForm.get(id);
         if ("None" in user)
             return Err({ NotFound: `answer with id=${id} not found` });
@@ -379,7 +404,8 @@ export default Canister({
         return Ok(answers);
     }),
 
-    getAnswerIndex: query([text], Result(Vec(FormResponseAnswer), Message), (id) => {
+    // Get All Answer form a Respond
+    getAnswerWithFormRespondId: query([text], Result(Vec(FormResponseAnswer), Message), (id) => {
         let respondAnswer = listOfFormResponse.get(id);
         if ("None" in respondAnswer)
             return Err({ NotFound: `answer with id=${id} not found` });
