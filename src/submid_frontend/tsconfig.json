@@ -12,7 +12,8 @@
     "useDefineForClassFields": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@backend": ["../declarations/submid_backend"]
     },
 
     /* Bundler mode */

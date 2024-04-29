@@ -38,8 +38,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      declarations: fileURLToPath(new URL('../declarations', import.meta.url)),
       '@': path.resolve(__dirname, './src'),
+      '@backend': path.resolve(__dirname, '../declarations/submid_backend'),
     },
   },
 });
