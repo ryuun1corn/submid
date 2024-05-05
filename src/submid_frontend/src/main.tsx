@@ -4,10 +4,10 @@ import App from './App.tsx';
 import './index.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import NotFoundModule from './components/modules/NotFoundModule/index.tsx';
-import CreateFormModule from './components/modules/CreateFormModule/index.tsx';
-import HomepageModule from './components/modules/HomepageModule/index.tsx';
-import AboutModule from './components/modules/AboutModule/index.tsx';
+import NotFoundModule from './modules/NotFoundModule/index.tsx';
+import CreateFormModule from './modules/CreateFormModule/index.tsx';
+import HomepageModule from './modules/HomepageModule/index.tsx';
+import AboutModule from './modules/AboutModule/index.tsx';
 
 const router = createBrowserRouter([
   {
