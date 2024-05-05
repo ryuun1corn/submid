@@ -154,7 +154,7 @@ export default Canister({
   getUserById: query([Principal], Result(User, Message), (id) => {
     const user = listOfUser.get(id);
     if ('None' in user)
-      return Err({ NotFound: `form with id=${id} not found` });
+      return Err({ NotFound: `user with id=${id} not found` });
 
     return Ok(user.Some);
   }),

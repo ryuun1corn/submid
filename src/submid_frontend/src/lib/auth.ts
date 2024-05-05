@@ -18,6 +18,11 @@ export async function getPrincipalText() {
   return (await getPrincipal()).toText();
 }
 
+export async function getIdentity() {
+  const authClient = await getAuthClient();
+  return authClient.getIdentity();
+}
+
 export async function isAuthenticated(): Promise<boolean> {
   try {
     const authClient = await getAuthClient();
