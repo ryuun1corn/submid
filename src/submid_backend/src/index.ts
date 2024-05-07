@@ -112,6 +112,11 @@ const User = Record({
 });
 type User = typeof User.tsType;
 
+const UserPayload = Record({
+  id: Principal,
+  name: text
+})
+
 const listOfForm = StableBTreeMap<text, Form>(0);
 const listOfQuestion = StableBTreeMap<text, Question>(1);
 const listOfFormResponse = StableBTreeMap<text, FormResponse>(2);
@@ -120,15 +125,16 @@ const listOfUser = StableBTreeMap<Principal, User>(4);
 const listOfQuestionChoice = StableBTreeMap<text, QuestionChoice>(5);
 const listOfKeyAnswer = StableBTreeMap<text, KeyAnswer>(6);
 
+
 let message = '';
 export default Canister({
   // Create new User
-  createUser: update([text], Message, (name) => {
+  createUser: update([UserPayload], Message, (payload) => {
     let newUser = {
-      id: ic.caller(),
+      id: payload.id,
       listOfForm: new Array(),
       listOfAnswer: new Array(),
-      userName: name,
+      userName: payload.name,
       createdAt: ic.time(),
     };
     listOfUser.insert(newUser.id, newUser);

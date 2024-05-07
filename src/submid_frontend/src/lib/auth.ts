@@ -36,7 +36,6 @@ export async function isAuthenticated(): Promise<boolean> {
 export async function login() {
   const authClient = await getAuthClient();
   const isAuthenticated = await authClient.isAuthenticated();
-
   if (!isAuthenticated) {
     await authClient?.login({
       identityProvider: IDENTITY_PROVIDER,
