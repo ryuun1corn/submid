@@ -4,7 +4,7 @@ import {
   AuthContextProviderProps,
   UserInterface,
 } from './interface';
-import { createActor, canisterId } from '@backend';
+import { createActor, canisterId, submid_backend } from '@backend';
 import { AuthClient } from '@dfinity/auth-client';
 import { ActorSubclass } from '../../../../../../node_modules/@dfinity/agent';
 import { _SERVICE } from '../../../../../declarations/submid_backend/submid_backend.did';
@@ -39,8 +39,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   const logout = () => {
     authClient?.logout();
     setIsAuthenticated(false);
-    setActor(undefined);
-    window.location.reload();
+    setActor(submid_backend);
   };
 
   const initActor = () => {
@@ -50,20 +49,24 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       },
     });
 
-    setActor(actor as ActorSubclass<_SERVICE>);
+    setActor(actor);
   };
 
   const getProfile = async () => {
     if (!authClient || !actor) return;
 
-    const principal = await authClient.getIdentity().getPrincipal();
+    const principal = authClient.getIdentity().getPrincipal();
     if (principal.isAnonymous()) setProfile(null);
 
-    const responseData = await actor?.getUserById(principal);
-    if ('Err' in responseData && 'NotFound' in responseData.Err) {
-      setProfile(null);
-    } else if ('Ok' in responseData) {
-      setProfile(responseData.Ok);
+    try {
+      const responseData = await actor?.getUserById(principal);
+      if ('Err' in responseData && 'NotFound' in responseData.Err) {
+        setProfile(null);
+      } else if ('Ok' in responseData) {
+        setProfile(responseData.Ok);
+      }
+    } catch (err: any) {
+      throw new Error(err.message);
     }
   };
 
