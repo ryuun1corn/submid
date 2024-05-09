@@ -8,7 +8,9 @@ import NotFoundModule from './modules/NotFoundModule/index.tsx';
 import CreateFormModule from './modules/CreateFormModule/index.tsx';
 import HomepageModule from './modules/HomepageModule/index.tsx';
 import AboutModule from './modules/AboutModule/index.tsx';
-import { AuthContextProvider } from './components/contexts/UseAuthContext/index.tsx';
+import SeeUserForm from './modules/SeeUserForm/index.tsx';
+import SeeFormResponse from './modules/SeeFormResponse/index.tsx';
+import FillForm from './modules/FillForm/index.tsx';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +30,23 @@ const router = createBrowserRouter([
         path: '/about',
         element: <AboutModule />,
       },
+      {
+        path: '/fill',
+        element: <FillForm />
+      },
+      {
+        path: '/seeForm',
+        element: <SeeUserForm />,
+      },
+      {
+        path: '/seeForm/:id',
+        element: <SeeFormResponse />
+      },
+      {
+        path: '/notFound',
+        element: <NotFoundModule />
+      }
+
     ],
   },
 ]);

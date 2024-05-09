@@ -42,6 +42,7 @@ const Question = Record({
   pageIndex: nat64,
   typeOfQuestion: text,
   needAnswer: bool,
+  content: text
 });
 type Question = typeof Question.tsType;
 
@@ -112,6 +113,11 @@ const User = Record({
 });
 type User = typeof User.tsType;
 
+const UserPayload = Record({
+  id: Principal,
+  name: text
+})
+
 const listOfForm = StableBTreeMap<text, Form>(0);
 const listOfQuestion = StableBTreeMap<text, Question>(1);
 const listOfFormResponse = StableBTreeMap<text, FormResponse>(2);
@@ -120,15 +126,16 @@ const listOfUser = StableBTreeMap<Principal, User>(4);
 const listOfQuestionChoice = StableBTreeMap<text, QuestionChoice>(5);
 const listOfKeyAnswer = StableBTreeMap<text, KeyAnswer>(6);
 
+
 let message = '';
 export default Canister({
   // Create new User
-  createUser: update([text], Message, (name) => {
+  createUser: update([UserPayload], Message, (payload) => {
     let newUser = {
-      id: ic.caller(),
+      id: payload.id,
       listOfForm: new Array(),
       listOfAnswer: new Array(),
-      userName: name,
+      userName: payload.name,
       createdAt: ic.time(),
     };
     listOfUser.insert(newUser.id, newUser);
@@ -195,6 +202,7 @@ export default Canister({
         id: uuidv4(),
         index: BigInt(i),
         pageIndex: payload.pageIndex[i],
+        content: payload.contents[i],
         typeOfQuestion: payload.typeOfQuestion[i],
         choice:
           payload.typeOfQuestion[i] == 'text' ? new Array() : payload.choice[i],
@@ -211,6 +219,15 @@ export default Canister({
         listOfKeyAnswer.insert(keyAnswer.id, keyAnswer);
       }
 
+      for (let i = 0; i < questionRequest.choice.length; i++) {
+        let choice = {
+          questionId: questionRequest.id,
+          id: uuidv4(),
+          index: BigInt(i),
+          content: questionRequest.choice[i],
+        };
+        listOfQuestionChoice.insert(choice.id, choice);
+      }
       listOfQuestion.insert(questionRequest.id, questionRequest);
     }
 
@@ -278,7 +295,7 @@ export default Canister({
   }),
 
   // Get Question that it's Form Id
-  getQuestionWithFromId: query([text], Result(Vec(Question), Message), (id) => {
+  getQuestionWithFormId: query([text], Result(Vec(Question), Message), (id) => {
     const formRequest = listOfForm.get(id);
     if ('None' in formRequest)
       return Err({ NotFound: `form with id=${id} not found` });
@@ -302,10 +319,11 @@ export default Canister({
       if ('None' in question)
         return Err({ NotFound: `question with id=${id} not found` });
 
+      let questionId = question.Some?.id;
       let answer = new Array();
       listOfQuestionChoice.values().map((questions) => {
-        if (questions.questionId == questions.questionId) {
-          answer.push(question);
+        if (questions.questionId == questionId) {
+          answer.push(questions);
         }
       });
 
@@ -336,7 +354,7 @@ export default Canister({
       for (let i = 0; i < response.listOfResponseAnswer.length; i++) {
         response.listOfResponseAnswer[i].map((answer) => {
           let questionAnswer = {
-            responseId: form.Some.id,
+            responseId: formResponse.id,
             id: uuidv4(),
             index: BigInt(i),
             content: answer,
