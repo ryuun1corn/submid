@@ -47,11 +47,15 @@ const CreateFormModule = () => {
   const [needAnswer, setNeedAnswer] = useState<boolean[]>([]);
   const [questionChoice, setQuestionChoice] = useState<string[][]>([[]]);
   const [keyAnswer, setKeyAnswer] = useState<string[][]>([[]]);
+// import { Suspense } from 'react';
+// import { useAuthContext } from '@/components/contexts/UseAuthContext';
+// import ProfileCard from './module-elements/ProfileCard';
 
-  async function logoutUser() {
-    setUser(undefined);
-    await logout();
-  }
+// const CreateFormModule = () => {
+//   const { login, isAuthenticated } = useAuthContext();
+
+  const LoadComponent = () => {
+    if (isAuthenticated === undefined) throw new Promise(() => {});
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
@@ -343,6 +347,18 @@ const CreateFormModule = () => {
   useEffect(() => {
     getData();
   }, [setUser, setPrincipal]);
+<!--     return !isAuthenticated ? (
+      <div className="flex flex-col items-center gap-5">
+        <div>You are not authenticated yet</div>
+
+        <Button variant="secondary" onClick={login}>
+          Login
+        </Button>
+      </div>
+    ) : (
+      <ProfileCard />
+    );
+  }; -->
 
   return (
     <>
@@ -447,6 +463,9 @@ const CreateFormModule = () => {
           </div>
         </>
       )}
+<!--       <Suspense fallback={<div>loading...</div>}>
+        <LoadComponent />
+      </Suspense> -->
     </>
   );
 };
