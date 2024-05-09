@@ -32,7 +32,7 @@ import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { useState, FormEvent, useEffect, FormHTMLAttributes } from 'react';
+import { useState, FormEvent, useEffect } from 'react';
 import { submid_backend } from '@backend';
 
 const CreateFormModule = () => {
@@ -57,20 +57,11 @@ const CreateFormModule = () => {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
     const name = formData.get('name') as string;
-    // const identity = await getIdentity();
     const principal = await getPrincipal();
     const user = {
       id: principal,
       name: name
     }
-    // const actor = createActor(
-    //   process.env.CANISTER_ID_SUBMID_BACKEND as string,
-    //   {
-    //     agentOptions: {
-    //       identity: identity,
-    //     },
-    //   },
-    // );
 
     setIsLoading(true);
     const result = await submid_backend.createUser(user);
@@ -98,7 +89,7 @@ const CreateFormModule = () => {
   }
 
   function handleDeleteCheck(checkIndex: number, index: number) {
-    setQuestionChoice(allChoice => allChoice.map((choices, i) => (i == index ? choices.filter((item, j) => (j != checkIndex)) : [...choices])))
+    setQuestionChoice(allChoice => allChoice.map((choices, i) => (i == index ? choices.filter((item, j) => (j != checkIndex && item == item)) : [...choices])))
   }
 
 
@@ -146,8 +137,7 @@ const CreateFormModule = () => {
             </div>
             <button className='w-5 h-5 rounded-full flex text-center items-center text-rose-400 rounded border-solid border-2 border-rose-400 p-1' onClick={() => handleDeleteCheck(i, index)} > - </button>
           </div>
-        ))
-        }
+        ))}
       </div >
     )
 
@@ -301,11 +291,11 @@ const CreateFormModule = () => {
 
   function deleteQuestion(index: number) {
     setNumberOfQuestion(numberOfQuestion - 1);
-    setQuestion(prev => prev.filter((item, i) => i != index));
-    setKeyAnswer(prev => prev.filter((item, i) => i != index));
-    setQuestionChoice(prev => prev.filter((item, i) => i != index));
-    setTypeOfAnswer(prev => prev.filter((item, i) => i != index));
-    setNeedAnswer(prev => prev.filter((item, i) => i != index));
+    setQuestion(prev => prev.filter((item, i) => (i != index && item == item)));
+    setKeyAnswer(prev => prev.filter((item, i) => (i != index && item == item)));
+    setQuestionChoice(prev => prev.filter((item, i) => (i != index && item == item)));
+    setTypeOfAnswer(prev => prev.filter((item, i) => (i != index && item == item)));
+    setNeedAnswer(prev => prev.filter((item, i) => (i != index && item == item)));
   }
 
   async function createForm() {
@@ -410,7 +400,7 @@ const CreateFormModule = () => {
         </Card>
       ) : (
         <>
-          <div className='p-10 flex flex-col items-center gap-8 w-[600px]'>
+          <div className='p-10 flex flex-col items-center gap-8 w-1/2'>
             <div className='flex flex-col gap-2'>
               <h1 className="scroll-m-20 text-3xl text-left font-extrabold tracking-tight lg:text-5xl">
                 Welcome, {user}

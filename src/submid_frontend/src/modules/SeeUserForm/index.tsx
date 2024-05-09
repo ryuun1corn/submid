@@ -18,54 +18,24 @@ import {
     HoverCardTrigger,
     HoverCardContent,
 } from '@/components/ui/hover-card';
-import {
-    Select,
-    SelectContent,
-    SelectGroup,
-    SelectItem,
-    SelectLabel,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "@/components/ui/label"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { useState, FormEvent, useEffect, FormHTMLAttributes } from 'react';
+import { Link } from 'react-router-dom';
+import { useState, FormEvent, useEffect } from 'react';
 import { submid_backend } from '@backend';
-import { Principal } from '@dfinity/principal';
 
-interface okForm {
-    id: string;
-    title: string;
-    userId: Principal;
-    createdAt: BigInt;
-    description: string;
-    updateAt: BigInt;
-    numberOfQuestion: BigInt;
-}
-
-interface NotFoundForm {
-    Err: {
-        NotFound: string;
-    }
-}
-
-const SeeUserForm = () => {
+const seeUserForm = () => {
     const [principal, setPrincipal] = useState<string>('');
     const [user, setUser] = useState<string | null | undefined>(undefined);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [btnLoad, seBtnLoad] = useState<string[]>([])
     const [listAllForms, setListAllForms] =
         useState<{
             id: string;
             title: string;
-            userId: Principal;
             createdAt: bigint;
             description: string;
             updateAt: bigint;
             numberOfQuestion: bigint;
-        }[]>([]);
+        }[] | undefined>(undefined);
 
     async function logoutUser() {
         setUser(undefined);
@@ -113,21 +83,16 @@ const SeeUserForm = () => {
             return;
 
         const data = await submid_backend.getAllFormWithUserId(principal)
-        if ('Err' in data && 'NotFound' in data.Err) {
-            console.log("Ngga ada")
-        } else if ('Ok' in data) {
-            data.Ok.map(item => {
-                let value = {
-                    id: item.id,
-                    title: item.title,
-                    userId: item.userId,
-                    createdAt: item.createdAt,
-                    description: item.description,
-                    updateAt: item.updateAt,
-                    numberOfQuestion: item.numberOfQuestion
-                }
-                // setListAllForms(prev => [...prev, value])
-            })
+        if ('Ok' in data) {
+            setListAllForms(data.Ok)
+        }
+    }
+
+    async function deleteFormId(id: string) {
+        seBtnLoad(prev => [...prev, id]);
+        const result = await submid_backend.deleteFormWithId(id)
+        if (!("Succes" in result)) {
+            alert("Fail deleting this form")
         }
     }
 
@@ -135,6 +100,10 @@ const SeeUserForm = () => {
         getForm();
         getData();
     }, [setUser, setPrincipal]);
+
+    useEffect(() => {
+        console.log(btnLoad)
+    }, [btnLoad])
 
     return (
         <>
@@ -192,11 +161,38 @@ const SeeUserForm = () => {
                 </Card>
             ) : (
                 <>
+                    <div className='flex gap-3 flex-wrap'>
 
-                    <button onClick={logoutUser}>Keluar anjing</button>
+                        {listAllForms?.map(item => (
+                            <Card className="w-[350px]">
+                                <CardHeader>
+                                    <CardTitle>{item.title}</CardTitle>
+                                    <CardDescription>
+                                        {item.description}
+                                    </CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div>
+                                        <p>Form Id:</p>
+                                        <p>{item.id}</p>
+                                    </div>
+                                </CardContent>
+                                <CardFooter className="flex justify-between gap-3">
+                                    <Button className='flex basis-1/2'>
+                                        <Link to={`/seeForm/${item.id}`}>See Form Response</Link>
+                                    </Button>
+                                    <Button
+                                        variant="destructive"
+                                        className='flex basis-1/2'
+                                        onClick={() => deleteFormId(item.id)}
+                                        disabled={btnLoad.some(btn => btn == item.id)}>Delete Form</Button>
+                                </CardFooter>
+                            </Card>))}
+                    </div>
+                    <Button variant="destructive" onClick={logoutUser}>Logout!</Button>
                 </>
             )}
         </>)
 };
 
-export default SeeUserForm;
+export default seeUserForm;
