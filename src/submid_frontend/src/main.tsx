@@ -10,7 +10,7 @@ import HomepageModule from './modules/HomepageModule/index.tsx';
 import AboutModule from './modules/AboutModule/index.tsx';
 import SeeUserForm from './modules/SeeUserForm/index.tsx';
 import SeeFormResponse from './modules/SeeFormResponse/index.tsx';
-import FillForm from './modules/FillForm/index.tsx';
+import FillFormModule from './modules/FillFormModule/index.tsx';
 import { AuthContextProvider } from './components/contexts/UseAuthContext/index.tsx';
 import { Toaster } from './components/ui/sonner.tsx';
 
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/fill',
-        element: <FillForm />,
+        element: <FillFormModule />,
       },
       {
         path: '/seeForm',

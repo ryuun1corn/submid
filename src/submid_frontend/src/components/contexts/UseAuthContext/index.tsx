@@ -25,6 +25,8 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   const IDENTITY_PROVIDER = `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:8000`;
   const MAX_TTL = BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000);
 
+  console.log(profile);
+
   const login = () => {
     if (!authClient) return;
     authClient.login({
@@ -32,6 +34,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
       onSuccess: () => {
         initActor();
         setIsAuthenticated(true);
+        getProfile();
       },
       maxTimeToLive: MAX_TTL,
     });
@@ -42,7 +45,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     authClient.logout();
     setIsAuthenticated(false);
     setActor(submid_backend);
-    setProfile(undefined);
   };
 
   const initActor = () => {
@@ -57,13 +59,14 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   };
 
   const getProfile = async () => {
-    if (!authClient || !isAuthenticated || !actor) return;
+    if (!authClient) return;
 
     const principal = authClient.getIdentity().getPrincipal();
     if (principal.isAnonymous()) setProfile(null);
 
     try {
-      const responseData = await actor.getUserById(principal);
+      setProfile(undefined);
+      const responseData = await submid_backend.getUserById(principal);
       if ('Err' in responseData && 'NotFound' in responseData.Err) {
         setProfile(null);
       } else if ('Ok' in responseData) {
@@ -78,7 +81,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     if (!authClient || !actor || name == '') return;
 
     try {
-      const responseData = await actor.createUser({
+      const responseData = await submid_backend.createUser({
         id: authClient.getIdentity().getPrincipal(),
         name: name,
       });
@@ -103,13 +106,13 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     if (isAuthenticated) {
       initActor();
     }
-  }, [isAuthenticated]);
+  }, [authClient]);
 
   useEffect(() => {
     if (actor) {
       getProfile();
     }
-  }, [actor]);
+  }, [authClient, actor]);
 
   const contextValue = {
     profile: profile,

@@ -7,21 +7,17 @@ import {
   CardContent,
   CardFooter,
 } from '@/components/ui/card';
-import { logout, login, getPrincipalText, getPrincipal } from '@/lib/auth';
-import {
-  HoverCard,
-  HoverCardTrigger,
-  HoverCardContent,
-} from '@/components/ui/hover-card';
+import { login, getPrincipal } from '@/lib/auth';
 import { Input } from '@/components/ui/input';
 import { useState, FormEvent, useEffect } from 'react';
 import { submid_backend } from '@backend';
 import { QuestionLayout } from '@/components/ui/question-layout';
+import { useAuthContext } from '@/components/contexts/UseAuthContext';
+import AuthenticationCard from '@/components/elements/AuthenticationCard/AuthenticationCard';
 // import { Item } from '@radix-ui/react-dropdown-menu';
 
-const FillForm = () => {
-  const [principal, setPrincipal] = useState<string>('');
-  const [user, setUser] = useState<string | null | undefined>(undefined);
+const FillFormModule = () => {
+  const { isAuthenticated, profile, logout } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [valid, setValid] = useState<boolean>(false);
   const [questionResponse, setQuestionRespone] = useState<string[][]>([[]]);
@@ -54,11 +50,6 @@ const FillForm = () => {
     | undefined
   >(undefined);
 
-  async function logoutUser() {
-    setUser(undefined);
-    await logout();
-  }
-
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
     const formData = new FormData(event.target as HTMLFormElement);
@@ -72,24 +63,6 @@ const FillForm = () => {
     const result = await submid_backend.createUser(user);
     if ('Succes' in result) {
       window.location.reload();
-    }
-  }
-
-  async function getData() {
-    const principal = await getPrincipal();
-    if (principal.isAnonymous()) {
-      setUser(undefined);
-      return;
-    }
-
-    const principalText = await getPrincipalText();
-    setPrincipal(principalText);
-
-    const data = await submid_backend.getUserById(principal);
-    if ('Err' in data && 'NotFound' in data.Err) {
-      setUser(null);
-    } else if ('Ok' in data) {
-      setUser(data.Ok.userName);
     }
   }
 
@@ -232,118 +205,54 @@ const FillForm = () => {
     );
   };
 
-  useEffect(() => {
-    getData();
-  }, [setUser, setPrincipal]);
-
   return (
-    <>
-      <div className="absolute top-10 left-10"></div>
-      {user === undefined ? (
-        <div className="flex flex-col items-center gap-5">
-          <div>You are not authenticated yet</div>
-
-          <Button variant="secondary" onClick={login}>
-            Login
-          </Button>
+    <AuthenticationCard>
+      <div className="p-10 flex flex-col items-center gap-8 w-1/2">
+        <div className="flex flex-col gap-2">
+          <h1 className="scroll-m-20 text-3xl text-left font-extrabold tracking-tight lg:text-5xl">
+            Welcome, {profile?.userName}
+          </h1>
+          <p className="leading-7">
+            When filling out forms, stick with trusted individuals or
+            organizations. Whether it's personal or for a group, prioritize
+            trust to keep your information safe and secure.
+          </p>
         </div>
-      ) : user === null ? (
-        <Card className="w-[350px]">
-          <CardHeader>
-            <CardTitle>Call yourself</CardTitle>
-            <CardDescription>
-              Initiate a call to yourself in one click.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form
-              action="#"
-              onSubmit={handleSubmit}
-              className="flex flex-col gap-3"
-            >
-              <label htmlFor="name">Enter your name: &nbsp;</label>
-              <input
-                id="name"
-                name="name"
-                alt="Name"
-                type="text"
-                className="border-[2px] rounded-md p-2 dark:text-black"
-              />
-              <Button type="submit" disabled={isLoading}>
-                Click me!
-              </Button>
-            </form>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <HoverCard>
-              <HoverCardTrigger asChild>
-                <Button variant="link">Show Principal</Button>
-              </HoverCardTrigger>
-              <HoverCardContent className="">
-                <div className="flex justify-between space-x-4">
-                  <div className="space-y-1">
-                    <h4 className="text-sm font-semibold">Your Principal:</h4>
-                    <p className="text-sm">{principal}</p>
-                  </div>
-                </div>
-              </HoverCardContent>
-            </HoverCard>
-          </CardFooter>
-        </Card>
-      ) : (
-        <>
-          <div className="p-10 flex flex-col items-center gap-8 w-1/2">
-            <div className="flex flex-col gap-2">
-              <h1 className="scroll-m-20 text-3xl text-left font-extrabold tracking-tight lg:text-5xl">
-                Welcome, {user}
-              </h1>
-              <p className="leading-7">
-                When filling out forms, stick with trusted individuals or
-                organizations. Whether it's personal or for a group, prioritize
-                trust to keep your information safe and secure.
-              </p>
-            </div>
 
-            <div className="w-full">
-              <form
-                className="w-full flex gap-x-4"
-                action=""
-                onSubmit={(e) => handleSearch(e)}
+        <div className="w-full">
+          <form
+            className="w-full flex gap-x-4"
+            action=""
+            onSubmit={(e) => handleSearch(e)}
+          >
+            <Input type="text" name="formId" placeholder="SubmiD Form ID" />
+            <Button type="submit">Search</Button>
+          </form>
+        </div>
+        {valid && (
+          <Card className="w-full p-3">
+            <CardHeader className="">
+              <CardTitle>{form?.title}</CardTitle>
+              <CardDescription>{form?.description}</CardDescription>
+            </CardHeader>
+            <CardContent>{getForm()}</CardContent>
+            <CardFooter>
+              <Button
+                type="submit"
+                disabled={isLoading}
+                onClick={createResponse}
               >
-                <Input type="text" name="formId" placeholder="SubmiD Form ID" />
-                <Button type="submit">Search</Button>
-              </form>
-            </div>
-            {valid && (
-              <Card className="w-full p-3">
-                <CardHeader className="">
-                  <CardTitle>{form?.title}</CardTitle>
-                  <CardDescription>{form?.description}</CardDescription>
-                </CardHeader>
-                <CardContent>{getForm()}</CardContent>
-                <CardFooter>
-                  <Button
-                    type="submit"
-                    disabled={isLoading}
-                    onClick={createResponse}
-                  >
-                    Create Response
-                  </Button>
-                </CardFooter>
-              </Card>
-            )}
-            <Button
-              variant="destructive"
-              className="w-full"
-              onClick={logoutUser}
-            >
-              Logout
-            </Button>
-          </div>
-        </>
-      )}
-    </>
+                Create Response
+              </Button>
+            </CardFooter>
+          </Card>
+        )}
+        <Button variant="destructive" className="w-full" onClick={logout}>
+          Logout
+        </Button>
+      </div>
+    </AuthenticationCard>
   );
 };
 
-export default FillForm;
+export default FillFormModule;
