@@ -7,7 +7,7 @@ import {
   CardContent,
   CardFooter,
 } from '@/components/ui/card';
-import { login, getPrincipal } from '@/lib/auth';
+import { getPrincipal } from '@/lib/auth';
 import { Input } from '@/components/ui/input';
 import { useState, FormEvent, useEffect } from 'react';
 import { submid_backend } from '@backend';
@@ -17,7 +17,7 @@ import AuthenticationCard from '@/components/elements/AuthenticationCard/Authent
 // import { Item } from '@radix-ui/react-dropdown-menu';
 
 const FillFormModule = () => {
-  const { isAuthenticated, profile, logout } = useAuthContext();
+  const { profile, logout } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [valid, setValid] = useState<boolean>(false);
   const [questionResponse, setQuestionRespone] = useState<string[][]>([[]]);
@@ -49,22 +49,6 @@ const FillFormModule = () => {
       }
     | undefined
   >(undefined);
-
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
-    const name = formData.get('name') as string;
-    const principal = await getPrincipal();
-    const user = {
-      id: principal,
-      name: name,
-    };
-    setIsLoading(true);
-    const result = await submid_backend.createUser(user);
-    if ('Succes' in result) {
-      window.location.reload();
-    }
-  }
 
   async function getQuestionChoice(id: string) {
     const result = await submid_backend.getAllQuestionChoiceWithQuestionId(id);

@@ -4,9 +4,8 @@ import {
   AuthContextProviderProps,
   UserInterface,
 } from './interface';
-import { createActor, canisterId, submid_backend } from '@backend';
+import { submid_backend } from '@backend';
 import { AuthClient } from '@dfinity/auth-client';
-import { ActorSubclass } from '../../../../../../node_modules/@dfinity/agent';
 import { _SERVICE } from '../../../../../declarations/submid_backend/submid_backend.did';
 
 const AuthContext = createContext({} as AuthContextInterface);
@@ -18,21 +17,17 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 }) => {
   const [profile, setProfile] = useState<UserInterface | null>();
   const [authClient, setAuthClient] = useState<AuthClient>();
-  const [actor, setActor] = useState<ActorSubclass<_SERVICE>>(submid_backend);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
 
   // The current URL is for testing purposes
   const IDENTITY_PROVIDER = `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:8000`;
   const MAX_TTL = BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000);
 
-  console.log(profile);
-
   const login = () => {
     if (!authClient) return;
     authClient.login({
       identityProvider: IDENTITY_PROVIDER,
       onSuccess: () => {
-        initActor();
         setIsAuthenticated(true);
         getProfile();
       },
@@ -44,18 +39,6 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
     if (!authClient) return;
     authClient.logout();
     setIsAuthenticated(false);
-    setActor(submid_backend);
-  };
-
-  const initActor = () => {
-    if (!authClient || !isAuthenticated) return;
-    const actor = createActor(canisterId as string, {
-      agentOptions: {
-        identity: authClient.getIdentity(),
-      },
-    });
-
-    setActor(actor);
   };
 
   const getProfile = async () => {
@@ -78,7 +61,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   };
 
   const createProfile = async (name: string) => {
-    if (!authClient || !actor || name == '') return;
+    if (!authClient || name == '') return;
 
     try {
       const responseData = await submid_backend.createUser({
@@ -103,21 +86,14 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   }, []);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      initActor();
-    }
-  }, [authClient]);
-
-  useEffect(() => {
-    if (actor) {
+    if (authClient) {
       getProfile();
     }
-  }, [authClient, actor]);
+  }, [authClient]);
 
   const contextValue = {
     profile: profile,
     authClient: authClient,
-    actor: actor,
     isAuthenticated: isAuthenticated,
     createProfile: createProfile,
     login: login,

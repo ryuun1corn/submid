@@ -10,17 +10,18 @@ import {
 import { FormEvent, Suspense, useState } from 'react';
 import { useAuthContext } from '../../contexts/UseAuthContext';
 import { AuthenticationCardPropsInterface } from './interface';
+import { Input } from '@/components/ui/input';
 
 const AuthenticationCard: React.FC<AuthenticationCardPropsInterface> = ({
   children,
 }) => {
-  const { isAuthenticated, login, profile, authClient, actor, createProfile } =
+  const { isAuthenticated, login, profile, authClient, createProfile } =
     useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-    if (!authClient || !actor) return;
+    if (!authClient) return;
     const formData = new FormData(event.target as HTMLFormElement);
     const name = formData.get('name') as string;
 
@@ -56,12 +57,13 @@ const AuthenticationCard: React.FC<AuthenticationCardPropsInterface> = ({
             className="flex flex-col gap-3"
           >
             <label htmlFor="name">Enter your name: &nbsp;</label>
-            <input
+            <Input
               id="name"
               name="name"
               alt="Name"
               type="text"
-              className="border-[2px] rounded-md p-2 dark:text-black"
+              className="border-[2px] rounded-md p-2"
+              disabled={isLoading}
             />
             <Button type="submit" disabled={isLoading}>
               Click me!

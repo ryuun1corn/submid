@@ -25,9 +25,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { QuestionInterface } from '../interface';
 import { Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';
+import { submid_backend } from '@backend';
 
 const CreateFormCard = () => {
-  const { profile, logout, actor } = useAuthContext();
+  const { profile, logout } = useAuthContext();
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [questions, setQuestions] = useState<QuestionInterface[]>([]);
@@ -368,7 +369,7 @@ const CreateFormCard = () => {
     // console.log(question.length, typeOfanswer.length, needAnswer.length)
 
     let payload = {
-      userId: profile?.id,
+      userId: profile.id,
       title: title,
       description: description,
       numberOfQuestion: BigInt(questions.length),
@@ -380,7 +381,7 @@ const CreateFormCard = () => {
       keyAnswer: questions.map((question) => question.key),
     };
 
-    const result = await actor?.addForm(payload);
+    const result = await submid_backend.addForm(payload);
     if (result) {
       if ('Ok' in result) {
         console.log('berhasil');
