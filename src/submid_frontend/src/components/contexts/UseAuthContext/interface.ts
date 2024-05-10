@@ -13,6 +13,7 @@ export interface AuthContextInterface {
   authClient: AuthClient | undefined;
   actor: ActorSubclass<_SERVICE> | undefined;
   isAuthenticated: boolean | undefined;
+  createProfile: (name: string) => Promise<void>;
   login: () => void;
   logout: () => void;
 }

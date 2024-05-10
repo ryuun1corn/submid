@@ -11,6 +11,8 @@ import AboutModule from './modules/AboutModule/index.tsx';
 import SeeUserForm from './modules/SeeUserForm/index.tsx';
 import SeeFormResponse from './modules/SeeFormResponse/index.tsx';
 import FillForm from './modules/FillForm/index.tsx';
+import { AuthContextProvider } from './components/contexts/UseAuthContext/index.tsx';
+import { Toaster } from './components/ui/sonner.tsx';
 
 const router = createBrowserRouter([
   {
@@ -32,7 +34,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/fill',
-        element: <FillForm />
+        element: <FillForm />,
       },
       {
         path: '/seeForm',
@@ -40,13 +42,8 @@ const router = createBrowserRouter([
       },
       {
         path: '/seeForm/:id',
-        element: <SeeFormResponse />
+        element: <SeeFormResponse />,
       },
-      {
-        path: '/notFound',
-        element: <NotFoundModule />
-      }
-
     ],
   },
 ]);
@@ -57,6 +54,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <AuthContextProvider>
         <RouterProvider router={router} />
       </AuthContextProvider>
+      <Toaster />
     </ThemeProvider>
   </React.StrictMode>,
 );

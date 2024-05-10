@@ -52,7 +52,6 @@ export async function logout() {
   authClient.logout();
   window.location.reload();
 }
-=======
 // import { AuthClient } from '@dfinity/auth-client';
 
 // // that is the url of the webapp for the internet identity.

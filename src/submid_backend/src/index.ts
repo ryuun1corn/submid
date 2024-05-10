@@ -42,7 +42,7 @@ const Question = Record({
   pageIndex: nat64,
   typeOfQuestion: text,
   needAnswer: bool,
-  content: text
+  content: text,
 });
 type Question = typeof Question.tsType;
 
@@ -115,8 +115,8 @@ type User = typeof User.tsType;
 
 const UserPayload = Record({
   id: Principal,
-  name: text
-})
+  name: text,
+});
 
 const listOfForm = StableBTreeMap<text, Form>(0);
 const listOfQuestion = StableBTreeMap<text, Question>(1);
@@ -125,7 +125,6 @@ const listOfResponseAnswer = StableBTreeMap<text, FormResponseAnswer>(3);
 const listOfUser = StableBTreeMap<Principal, User>(4);
 const listOfQuestionChoice = StableBTreeMap<text, QuestionChoice>(5);
 const listOfKeyAnswer = StableBTreeMap<text, KeyAnswer>(6);
-
 
 let message = '';
 export default Canister({
