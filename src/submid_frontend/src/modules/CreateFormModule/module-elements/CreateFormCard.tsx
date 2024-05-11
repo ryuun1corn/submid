@@ -86,7 +86,7 @@ const CreateFormCard = () => {
                         i == index
                           ? {
                               ...question,
-                              required: e == '0',
+                              required: e === '1',
                             }
                           : question,
                       ),
@@ -274,7 +274,7 @@ const CreateFormCard = () => {
       ...questions,
       {
         question: '',
-        required: false,
+        required: true,
         type: '0',
         answerChoices: new Array(),
         key: new Array(),
@@ -349,6 +349,8 @@ const CreateFormCard = () => {
       toast(err.message);
       return;
     }
+
+    console.log();
 
     setIsLoading(true);
     let currentPageIndex = new Array();

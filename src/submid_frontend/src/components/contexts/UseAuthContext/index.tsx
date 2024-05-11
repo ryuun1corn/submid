@@ -78,10 +78,13 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 
   useEffect(() => {
     AuthClient.create().then(async (client) => {
-      const isAuthenticated = await client.isAuthenticated();
+      const isAnonymous = await client
+        .getIdentity()
+        .getPrincipal()
+        .isAnonymous();
 
       setAuthClient(client);
-      setIsAuthenticated(isAuthenticated);
+      setIsAuthenticated(!isAnonymous);
     });
   }, []);
 
