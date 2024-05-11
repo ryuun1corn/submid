@@ -20,7 +20,11 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>();
 
   // The current URL is for testing purposes
-  const IDENTITY_PROVIDER = `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:8000`;
+  const status = process.env.DFX_NETWORK;
+  const IDENTITY_PROVIDER =
+    status === 'local'
+      ? `http://${process.env.CANISTER_ID_INTERNET_IDENTITY}.localhost:8000`
+      : `https://identity.ic0.app`;
   const MAX_TTL = BigInt(7 * 24 * 60 * 60 * 1000 * 1000 * 1000);
 
   const login = () => {

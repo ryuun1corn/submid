@@ -175,7 +175,11 @@ const FillForm: React.FC<FillFormPropsInterface> = ({
                   render={({ field }) => {
                     return (
                       <FormItem>
-                        <FormLabel>{question.content}</FormLabel>
+                        <FormLabel
+                          className={`${question.needAnswer && "after:content-['*'] after:ml-0.5 after:text-red-500"}`}
+                        >
+                          {question.content}
+                        </FormLabel>
                         <FormControl>
                           <Input {...field} />
                         </FormControl>
@@ -195,7 +199,11 @@ const FillForm: React.FC<FillFormPropsInterface> = ({
                   render={({ field }) => {
                     return (
                       <FormItem className="space-y-3">
-                        <FormLabel>{question.content}</FormLabel>
+                        <FormLabel
+                          className={`${question.needAnswer && "after:content-['*'] after:ml-0.5 after:text-red-500"}`}
+                        >
+                          {question.content}
+                        </FormLabel>
                         <FormControl>
                           <RadioGroup
                             onValueChange={field.onChange}
@@ -235,7 +243,9 @@ const FillForm: React.FC<FillFormPropsInterface> = ({
                   render={() => (
                     <FormItem>
                       <div className="mb-4">
-                        <FormLabel className="text-base">
+                        <FormLabel
+                          className={`${question.needAnswer && "after:content-['*'] after:ml-0.5 after:text-red-500"}`}
+                        >
                           {question.content}
                         </FormLabel>
                       </div>

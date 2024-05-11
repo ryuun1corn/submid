@@ -1,13 +1,4 @@
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from '@/components/ui/card';
-
 import { Link } from 'react-router-dom';
 import { useState, useEffect, Suspense } from 'react';
 import { submid_backend } from '@backend';
@@ -53,7 +44,7 @@ const seeUserForm = () => {
     return listAllForms.length > 0 ? (
       <Accordion type="multiple">
         {listAllForms.map((item) => (
-          <AccordionItem value={item.id}>
+          <AccordionItem value={item.id} key={item.id}>
             <AccordionTrigger>{item.title}</AccordionTrigger>
             <AccordionContent className="flex flex-row justify-between">
               <div className="flex items-center gap-2 font-mono">
