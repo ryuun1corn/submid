@@ -19,7 +19,7 @@ const HomepageModule = () => {
           <Link to={'/fill'}>Fill a Form</Link>
         </Button>
         <Button variant="outline" asChild>
-          <Link to={'/seeForm'}>See all Form</Link>
+          <Link to={'/forms'}>My forms</Link>
         </Button>
       </div>
     </>

@@ -16,7 +16,7 @@ import { useAuthContext } from '@/components/contexts/UseAuthContext';
 
 const seeUserForm = () => {
   const { logout, profile } = useAuthContext();
-  const [btnLoad, seBtnLoad] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [listAllForms, setListAllForms] = useState<
     | {
         id: string;
@@ -40,11 +40,12 @@ const seeUserForm = () => {
   }
 
   async function deleteFormId(id: string) {
-    seBtnLoad((prev) => [...prev, id]);
+    setIsLoading(true);
     const result = await submid_backend.deleteFormWithId(id);
     if (!('Succes' in result)) {
       alert('Fail deleting this form');
-    }
+    } else window.location.reload();
+    setIsLoading(false);
   }
 
   useEffect(() => {
@@ -68,14 +69,14 @@ const seeUserForm = () => {
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between gap-3">
-                <Button className="flex basis-1/2">
-                  <Link to={`/seeForm/${item.id}`}>See Form Response</Link>
+                <Button className="flex basis-1/2" asChild disabled={isLoading}>
+                  <Link to={`/forms/${item.id}`}>See Form Response</Link>
                 </Button>
                 <Button
                   variant="destructive"
                   className="flex basis-1/2"
                   onClick={() => deleteFormId(item.id)}
-                  disabled={btnLoad.some((btn) => btn == item.id)}
+                  disabled={isLoading}
                 >
                   Delete Form
                 </Button>
