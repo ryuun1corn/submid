@@ -39,12 +39,10 @@ const router = createBrowserRouter([
       {
         path: '/forms',
         element: <SeeUserForm />,
-        children: [
-          {
-            path: 'forms/:id',
-            element: <SeeFormResponse />,
-          },
-        ],
+      },
+      {
+        path: '/forms/:id',
+        element: <SeeFormResponse />,
       },
     ],
   },

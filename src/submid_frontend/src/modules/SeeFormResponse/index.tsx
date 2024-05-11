@@ -165,10 +165,6 @@ const SeeFormResponse = () => {
     console.log('AA', answer);
   }, [answer]);
 
-  // useEffect(() => {
-  //     console.log("Bb", formResponse);
-  // }, [formResponse])
-
   useEffect(() => {
     checkStatus();
     getData();
