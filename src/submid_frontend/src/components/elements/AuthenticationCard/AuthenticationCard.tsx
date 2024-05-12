@@ -7,10 +7,30 @@ import {
   CardContent,
   CardFooter,
 } from '@/components/ui/card';
-import { FormEvent, Suspense, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useAuthContext } from '../../contexts/UseAuthContext';
 import { AuthenticationCardPropsInterface } from './interface';
 import { Input } from '@/components/ui/input';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from '@/components/ui/hover-card';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+
+const formSchema = z.object({
+  username: z.string().min(2).max(100),
+});
 
 const AuthenticationCard: React.FC<AuthenticationCardPropsInterface> = ({
   children,
@@ -19,11 +39,16 @@ const AuthenticationCard: React.FC<AuthenticationCardPropsInterface> = ({
     useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  async function handleSubmit(event: FormEvent) {
-    event.preventDefault();
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      username: '',
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     if (!authClient) return;
-    const formData = new FormData(event.target as HTMLFormElement);
-    const name = formData.get('name') as string;
+    const name = values.username;
 
     setIsLoading(true);
     createProfile(name).then(() => {
@@ -45,32 +70,43 @@ const AuthenticationCard: React.FC<AuthenticationCardPropsInterface> = ({
     ) : profile === null ? (
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>Call yourself</CardTitle>
+          <CardTitle>Create an account</CardTitle>
           <CardDescription>
-            Initiate a call to yourself in one click.
+            This account is bound to your Internet Identity
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form
-            action="#"
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-3"
-          >
-            <label htmlFor="name">Enter your name: &nbsp;</label>
-            <Input
-              id="name"
-              name="name"
-              alt="Name"
-              type="text"
-              className="border-[2px] rounded-md p-2"
-              disabled={isLoading}
-            />
-            <Button type="submit" disabled={isLoading}>
-              Click me!
-            </Button>
-          </form>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="username"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Username</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" disabled={isLoading}>
+                Submit
+              </Button>
+            </form>
+          </Form>
         </CardContent>
-        <CardFooter className="flex justify-between">Hi!</CardFooter>
+        <CardFooter className="flex justify-between">
+          <HoverCard>
+            <HoverCardTrigger asChild>
+              <Button variant="link">See principal</Button>
+            </HoverCardTrigger>
+            <HoverCardContent className="font-mono">
+              {authClient?.getIdentity().getPrincipal().toString()}
+            </HoverCardContent>
+          </HoverCard>
+        </CardFooter>
       </Card>
     ) : (
       children
