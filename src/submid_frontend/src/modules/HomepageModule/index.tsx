@@ -22,6 +22,11 @@ const HomepageModule = () => {
           <Link to={'/forms'}>My Forms</Link>
         </Button>
       </div>
+      <Button variant="link" asChild className="absolute bottom-5">
+        <Link to="/about" className="hover:underline">
+          More about us!
+        </Link>
+      </Button>
     </>
   );
 };
