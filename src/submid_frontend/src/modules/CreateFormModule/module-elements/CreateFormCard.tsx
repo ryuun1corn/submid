@@ -26,6 +26,7 @@ import { QuestionInterface } from '../interface';
 import { Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 import { submid_backend } from '@backend';
+import { useNavigate } from 'react-router-dom';
 
 const CreateFormCard = () => {
   const { profile } = useAuthContext();
@@ -33,6 +34,7 @@ const CreateFormCard = () => {
   const [description, setDescription] = useState<string>('');
   const [questions, setQuestions] = useState<QuestionInterface[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   function getContent() {
     const QuestionComponents = questions.map((_, i) => {
@@ -383,7 +385,8 @@ const CreateFormCard = () => {
     const result = await submid_backend.addForm(payload);
     if (result) {
       if ('Ok' in result) {
-        window.location.reload();
+        toast('Successfully created the form!');
+        navigate('/forms');
       }
     }
     setIsLoading(false);

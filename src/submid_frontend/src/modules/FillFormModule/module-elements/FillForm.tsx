@@ -17,6 +17,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useAuthContext } from '@/components/contexts/UseAuthContext';
 import { submid_backend } from '@backend';
+import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 const FillForm: React.FC<FillFormPropsInterface> = ({
   questions,
@@ -24,6 +26,7 @@ const FillForm: React.FC<FillFormPropsInterface> = ({
 }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { profile } = useAuthContext();
+  const navigate = useNavigate();
 
   const createFormSchema = () => {
     let formSchema: FormSchemaInterface = {};
@@ -148,9 +151,10 @@ const FillForm: React.FC<FillFormPropsInterface> = ({
     if (payload != undefined) {
       const result = await submid_backend.addFormResponse(payload);
       if ('Ok' in result) {
-        alert('Succes adding the response');
+        toast('Successfully submitted the form!');
+        navigate('/');
       } else {
-        alert('Failed adding the response');
+        toast('Something wrong happened!');
       }
     }
     setIsLoading(false);

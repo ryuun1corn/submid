@@ -32,8 +32,11 @@ const seeUserForm = () => {
     setIsLoading(true);
     const result = await submid_backend.deleteFormWithId(id);
     if (!('Succes' in result)) {
-      alert('Fail deleting this form');
-    } else window.location.reload();
+      toast('Something wrong happened!');
+    } else {
+      window.location.reload();
+      toast('Successfully deleted the form.');
+    }
     setIsLoading(false);
   }
 
