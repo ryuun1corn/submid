@@ -50,8 +50,6 @@ const SeeFormResponse = () => {
         });
         setFormResponse(result.Ok);
       }
-    } else {
-      console.log('Ngga ada');
     }
   }
 
@@ -69,8 +67,6 @@ const SeeFormResponse = () => {
     const result = await submid_backend.getAnswerWithFormRespondId(id);
     if ('Ok' in result) {
       setAnswers((prev) => [...prev, result.Ok]);
-    } else {
-      console.log(result);
     }
   }
 
@@ -89,7 +85,7 @@ const SeeFormResponse = () => {
     <>
       {valid && (
         <>
-          <div className="flex gap-3 flex-wrap w-[80%] md:w-1/2">
+          <div className="flex gap-3 flex-wrap w-[80%] md:w-1/2 mt-14">
             {valid && answers.length === 0 ? (
               <p className="text-center m-auto">
                 This form doesn't have any response yet!

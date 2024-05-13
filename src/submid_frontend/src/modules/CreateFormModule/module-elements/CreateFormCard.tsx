@@ -28,7 +28,7 @@ import { toast } from 'sonner';
 import { submid_backend } from '@backend';
 
 const CreateFormCard = () => {
-  const { profile, logout } = useAuthContext();
+  const { profile } = useAuthContext();
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [questions, setQuestions] = useState<QuestionInterface[]>([]);
@@ -37,7 +37,7 @@ const CreateFormCard = () => {
   function getContent() {
     const QuestionComponents = questions.map((_, i) => {
       return (
-        <Card>
+        <Card key={i}>
           <CardHeader>
             <CardTitle>
               <div>
@@ -383,10 +383,7 @@ const CreateFormCard = () => {
     const result = await submid_backend.addForm(payload);
     if (result) {
       if ('Ok' in result) {
-        console.log('berhasil');
         window.location.reload();
-      } else {
-        console.log(result);
       }
     }
     setIsLoading(false);
@@ -450,14 +447,6 @@ const CreateFormCard = () => {
             </Button>
           </CardFooter>
         </Card>
-        <Button
-          variant="destructive"
-          className="w-full"
-          onClick={logout}
-          disabled={isLoading}
-        >
-          Logout
-        </Button>
       </div>
     </>
   );

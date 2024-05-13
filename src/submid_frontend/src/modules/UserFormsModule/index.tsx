@@ -96,9 +96,6 @@ const seeUserForm = () => {
             <LoadFormList />
           </Suspense>
         </div>
-        <Button variant="destructive" onClick={logout}>
-          Logout!
-        </Button>
       </>
     </AuthenticationCard>
   );

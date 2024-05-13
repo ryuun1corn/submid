@@ -2,6 +2,7 @@ import { ModeToggle } from '@/components/mode-toggle';
 import { HomeIcon } from 'lucide-react';
 import { Link, Outlet } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import UserInfo from './components/elements/UserInfo/UserInfo';
 
 function App() {
   return (
@@ -12,7 +13,10 @@ function App() {
             <HomeIcon className="h-6 w-6" />
           </Link>
         </Button>
-        <ModeToggle />
+        <div className="flex flex-row gap-2">
+          <UserInfo />
+          <ModeToggle />
+        </div>
       </nav>
       <Outlet />
     </main>

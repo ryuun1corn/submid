@@ -67,8 +67,6 @@ const FillForm: React.FC<FillFormPropsInterface> = ({
       }
     });
 
-    console.log(formSchema);
-
     return z.object(formSchema);
   };
 

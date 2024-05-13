@@ -113,9 +113,6 @@ const FillFormModule = () => {
             </CardContent>
           </Card>
         )}
-        <Button variant="destructive" className="w-full" onClick={logout}>
-          Logout
-        </Button>
       </div>
     </AuthenticationCard>
   );
