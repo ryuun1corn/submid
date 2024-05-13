@@ -162,7 +162,7 @@ const FillForm: React.FC<FillFormPropsInterface> = ({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col gap-6 *:border-2 *:rounded-xl *:p-5"
+        className="flex flex-col gap-6 *:border-2 *:rounded-xl *:p-4 *:md:p-5"
       >
         {questions.map((question) => {
           switch (question.typeOfQuestion) {

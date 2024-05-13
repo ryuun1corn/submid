@@ -46,20 +46,19 @@ const seeUserForm = () => {
         {listAllForms.map((item) => (
           <AccordionItem value={item.id} key={item.id}>
             <AccordionTrigger>{item.title}</AccordionTrigger>
-            <AccordionContent className="flex flex-row justify-between">
-              <div className="flex items-center gap-2 font-mono">
+            <AccordionContent className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <p className="font-mono">{item.id}</p>
+              <div className="flex flex-row gap-3">
                 <Button
-                  variant="ghost"
+                  variant="outline"
                   onClick={() => {
                     navigator.clipboard.writeText(item.id);
                     toast('Successfully copied to clipboard!');
                   }}
+                  className="flex basis-1/2"
                 >
                   <ClipboardCopyIcon className="w-4 h-4" />
                 </Button>
-                {item.id}
-              </div>
-              <div className="flex flex-row gap-3">
                 <Button className="flex basis-1/2" asChild disabled={isLoading}>
                   <Link to={`/forms/${item.id}`}>
                     <ScrollTextIcon />

@@ -89,14 +89,14 @@ const SeeFormResponse = () => {
     <>
       {valid && (
         <>
-          <div className="flex gap-3 flex-wrap w-1/2">
+          <div className="flex gap-3 flex-wrap w-[80%] md:w-1/2">
             {valid && answers.length === 0 ? (
               <p className="text-center m-auto">
                 This form doesn't have any response yet!
               </p>
             ) : (
               <Carousel className="w-full">
-                <CarouselContent className="w-full">
+                <CarouselContent className="">
                   {answers.map((answer, index) => {
                     return (
                       <CarouselItem key={index}>
@@ -109,8 +109,8 @@ const SeeFormResponse = () => {
                     );
                   })}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <CarouselPrevious className="-top-8 left-0 md:-left-12 md:top-1/2" />
+                <CarouselNext className="-top-8 right-0 md:-right-12 md:top-1/2" />
               </Carousel>
             )}
           </div>

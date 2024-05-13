@@ -49,9 +49,13 @@ const CreateFormCard = () => {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-5">
               <div className="flex flex-col-reverse sm:flex-row gap-2">
-                <Button variant="destructive" onClick={() => deleteQuestion(i)}>
+                <Button
+                  variant="destructive"
+                  onClick={() => deleteQuestion(i)}
+                  className="w-14"
+                >
                   <Trash2Icon className="w-4 h-4" />
                 </Button>
                 <Select
@@ -74,8 +78,8 @@ const CreateFormCard = () => {
                   <SelectContent>
                     <SelectGroup>
                       <SelectItem value="1">Text</SelectItem>
-                      <SelectItem value="2">Multiple choice</SelectItem>
-                      <SelectItem value="3">Check box</SelectItem>
+                      <SelectItem value="2">Radio</SelectItem>
+                      <SelectItem value="3">Multiple</SelectItem>
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -123,17 +127,14 @@ const CreateFormCard = () => {
                       onSubmit={(e) => addOption(e, i, 'choice')}
                       className="flex flex-col gap-3 w-full mb-3"
                     >
-                      <label htmlFor={`choice-${i}`}>
-                        {' '}
-                        Add new choice: &nbsp;
-                      </label>
+                      <Label htmlFor={`choice-${i}`}> Add option: &nbsp;</Label>
                       <div className="flex flex-col sm:flex-row gap-2 w-full items-center space-x-2">
                         <Input
                           id={`choice-${i}`}
                           name={`choice-${i}`}
                           alt={`choice-${i}`}
                           type="text"
-                          className="border-[2px] rounded-md p-2 dark:text-black basis-3/4 w-full"
+                          className="rounded-md basis-3/4 w-full"
                         />
                         <Button
                           variant="secondary"
@@ -156,14 +157,14 @@ const CreateFormCard = () => {
                       onSubmit={(e) => addOption(e, i, 'check')}
                       className="flex flex-col gap-3 mb-3"
                     >
-                      <label htmlFor={`check-${i}`}> Add options: &nbsp;</label>
+                      <Label htmlFor={`check-${i}`}> Add option: &nbsp;</Label>
                       <div className="flex flex-col sm:flex-row gap-2 w-full items-center space-x-2">
                         <Input
                           id={`check-${i}`}
                           name={`check-${i}`}
                           alt={`check-${i}`}
                           type="text"
-                          className="border-[2px] rounded-md p-2 dark:text-black basis-3/4"
+                          className="rounded-md basis-3/4"
                         />
                         <Button
                           variant="secondary"

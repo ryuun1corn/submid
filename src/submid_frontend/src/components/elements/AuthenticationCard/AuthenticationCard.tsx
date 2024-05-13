@@ -62,7 +62,7 @@ const AuthenticationCard: React.FC<AuthenticationCardPropsInterface> = ({
       </Button>
     </div>
   ) : profile === null ? (
-    <Card className="w-[350px]">
+    <Card className="w-[350px] max-w-[90%]">
       <CardHeader>
         <CardTitle>Create an account</CardTitle>
         <CardDescription>

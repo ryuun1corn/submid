@@ -76,12 +76,12 @@ const FillFormModule = () => {
 
   return (
     <AuthenticationCard>
-      <div className="p-10 flex flex-col items-center gap-8 w-1/2">
+      <div className="flex flex-col items-center gap-8 max-w-[80%] lg:w-1/2">
         <div className="flex flex-col gap-2">
           <h1 className="scroll-m-20 text-3xl text-left font-extrabold tracking-tight lg:text-5xl">
             Welcome, {profile?.userName}
           </h1>
-          <p className="leading-7">
+          <p className="leading-relaxed text-sm md:text-base">
             When filling out forms, stick with trusted individuals or
             organizations. Whether it's personal or for a group, prioritize
             trust to keep your information safe and secure.
@@ -90,16 +90,16 @@ const FillFormModule = () => {
 
         <div className="w-full">
           <form
-            className="w-full flex gap-x-4"
+            className="w-full flex flex-col sm:flex-row gap-4"
             action=""
             onSubmit={(e) => handleSearch(e)}
           >
-            <Input type="text" name="formId" placeholder="SubmiD Form ID" />
+            <Input type="text" name="formId" placeholder="SubmiD form ID" />
             <Button type="submit">Search</Button>
           </form>
         </div>
         {form && (
-          <Card className="w-full p-3">
+          <Card className="w-full md:p-3">
             <CardHeader className="">
               <CardTitle>{form?.title}</CardTitle>
               <CardDescription>{form?.description}</CardDescription>
