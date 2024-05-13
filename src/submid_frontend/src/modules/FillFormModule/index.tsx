@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 // import { Item } from '@radix-ui/react-dropdown-menu';
 
 const FillFormModule = () => {
-  const { profile, logout } = useAuthContext();
+  const { profile } = useAuthContext();
   const [questions, setQuestions] = useState<QuestionInterface[]>([]);
   const [form, setForm] = useState<FormInterface>();
 
