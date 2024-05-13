@@ -15,7 +15,7 @@ import { ClipboardCopyIcon, ScrollTextIcon, Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 
 const seeUserForm = () => {
-  const { logout, profile } = useAuthContext();
+  const { profile } = useAuthContext();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [listAllForms, setListAllForms] = useState<FormInterface[]>();
 
@@ -59,7 +59,7 @@ const seeUserForm = () => {
                 >
                   <ClipboardCopyIcon className="w-4 h-4" />
                 </Button>
-                <Button className="flex basis-1/2" asChild disabled={isLoading}>
+                <Button className="flex basis-1/2" disabled={isLoading}>
                   <Link to={`/forms/${item.id}`}>
                     <ScrollTextIcon />
                   </Link>

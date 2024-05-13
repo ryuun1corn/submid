@@ -54,9 +54,12 @@ const ResponseCard: React.FC<ResponseCardInterface> = ({
               <RadioGroup value={responses[0].content}>
                 {responses
                   .sort((a, b) => Number(a.index - b.index)) // turns out this sorting is not helping with anything
-                  .map((response) => {
+                  .map((response, index) => {
                     return (
-                      <div className="flex items-center space-x-3 space-y-0">
+                      <div
+                        className="flex items-center space-x-3 space-y-0"
+                        key={index}
+                      >
                         <RadioGroupItem value={response.content} disabled />
                         <Label>{response.content}</Label>
                       </div>
@@ -83,9 +86,12 @@ const ResponseCard: React.FC<ResponseCardInterface> = ({
               <div className="flex flex-col gap-1">
                 {responses
                   .sort((a, b) => Number(a.index - b.index))
-                  .map((response) => {
+                  .map((response, index) => {
                     return (
-                      <div className="flex flex-row items-start space-x-3 space-y-0">
+                      <div
+                        className="flex flex-row items-start space-x-3 space-y-0"
+                        key={index}
+                      >
                         <Checkbox
                           value={response.content}
                           checked={true}
