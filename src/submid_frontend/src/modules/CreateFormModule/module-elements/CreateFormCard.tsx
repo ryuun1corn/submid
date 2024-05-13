@@ -50,7 +50,7 @@ const CreateFormCard = () => {
           </CardHeader>
           <CardContent>
             <div className="flex flex-col gap-2">
-              <div className="flex flex-row gap-2">
+              <div className="flex flex-col-reverse sm:flex-row gap-2">
                 <Button variant="destructive" onClick={() => deleteQuestion(i)}>
                   <Trash2Icon className="w-4 h-4" />
                 </Button>
@@ -68,7 +68,7 @@ const CreateFormCard = () => {
                     );
                   }}
                 >
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-full sm:w-[180px]">
                     <SelectValue placeholder="Question type" />
                   </SelectTrigger>
                   <SelectContent>
@@ -94,7 +94,7 @@ const CreateFormCard = () => {
                   }}
                   defaultValue="1"
                 >
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-full sm:w-[180px]">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -121,19 +121,19 @@ const CreateFormCard = () => {
                     <form
                       action="#"
                       onSubmit={(e) => addOption(e, i, 'choice')}
-                      className="flex flex-col gap-3"
+                      className="flex flex-col gap-3 w-full mb-3"
                     >
                       <label htmlFor={`choice-${i}`}>
                         {' '}
                         Add new choice: &nbsp;
                       </label>
-                      <div className="flex w-full max-w-sm items-center space-x-2">
-                        <input
+                      <div className="flex flex-col sm:flex-row gap-2 w-full items-center space-x-2">
+                        <Input
                           id={`choice-${i}`}
                           name={`choice-${i}`}
                           alt={`choice-${i}`}
                           type="text"
-                          className="border-[2px] rounded-md p-2 dark:text-black basis-3/4"
+                          className="border-[2px] rounded-md p-2 dark:text-black basis-3/4 w-full"
                         />
                         <Button
                           variant="secondary"
@@ -154,11 +154,11 @@ const CreateFormCard = () => {
                     <form
                       action="#"
                       onSubmit={(e) => addOption(e, i, 'check')}
-                      className="flex flex-col gap-3"
+                      className="flex flex-col gap-3 mb-3"
                     >
                       <label htmlFor={`check-${i}`}> Add options: &nbsp;</label>
-                      <div className="flex w-full max-w-sm items-center space-x-2">
-                        <input
+                      <div className="flex flex-col sm:flex-row gap-2 w-full items-center space-x-2">
+                        <Input
                           id={`check-${i}`}
                           name={`check-${i}`}
                           alt={`check-${i}`}
@@ -327,9 +327,7 @@ const CreateFormCard = () => {
       if (question.question === '')
         throw new Error("There are some questions that don't have a title!");
       if (question.type == '0')
-        throw new Error(
-          "There are some questions that doesn't have a type yet!",
-        );
+        throw new Error("There are some questions that don't have a type yet!");
 
       if (
         (question.type === '2' || question.type === '3') &&
@@ -349,8 +347,6 @@ const CreateFormCard = () => {
       toast(err.message);
       return;
     }
-
-    console.log();
 
     setIsLoading(true);
     let currentPageIndex = new Array();
@@ -397,7 +393,7 @@ const CreateFormCard = () => {
 
   return (
     <>
-      <div className="p-10 flex flex-col items-center gap-8 w-1/2">
+      <div className="p-0 sm:p-10 flex flex-col items-center gap-8 w-[90%] xl:w-1/2">
         <div className="flex flex-col gap-2">
           <h1 className="scroll-m-20 text-3xl text-left font-extrabold tracking-tight lg:text-5xl">
             Welcome, {profile?.userName}
@@ -434,15 +430,7 @@ const CreateFormCard = () => {
             </div>
             <div className="flex flex-col gap-2">{getContent()}</div>
           </CardContent>
-          <CardFooter className="flex flex-row gap-x-3">
-            <Button
-              variant="outline"
-              className="flex basis-1/2 bg-blue-950 text-white"
-              onClick={createForm}
-              disabled={isLoading}
-            >
-              Create Form!
-            </Button>
+          <CardFooter className="flex flex-col sm:flex-row gap-3 *:w-full">
             <Button
               variant="secondary"
               className="flex basis-1/2"
@@ -450,6 +438,14 @@ const CreateFormCard = () => {
               disabled={isLoading}
             >
               Add a question
+            </Button>
+            <Button
+              variant="outline"
+              className="flex basis-1/2 bg-blue-950 text-white"
+              onClick={createForm}
+              disabled={isLoading}
+            >
+              Create Form!
             </Button>
           </CardFooter>
         </Card>

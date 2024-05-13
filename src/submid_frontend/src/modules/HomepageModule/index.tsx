@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 const HomepageModule = () => {
   return (
     <>
-      <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
+      <h1 className="font-bold tracking-tighter sm:text-5xl text-6xl md:text-7xl">
         SubmiD
       </h1>
-      <p className="max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400 text-center">
+      <p className="max-w-[90%] text-gray-500 text-xs sm:text-xl dark:text-gray-400 text-center">
         Secure, Decentralized, and Intuitive Form on the Blockchain. <br />
         Effortlessly build and share forms for any purpose.
       </p>
-      <div className="flex flex-row gap-5 *:w-30">
+      <div className="flex flex-col sm:flex-row gap-5 *:w-30 w-[90%] justify-center my-3 md:my-0">
         <Button asChild>
           <Link to={'/create'}>Create Form</Link>
         </Button>
