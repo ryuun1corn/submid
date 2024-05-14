@@ -1,18 +1,22 @@
 service: () -> {
-    addAnswer: (record {title:text; listOfResponseAnswer:vec vec text; userId:principal; formId:text}) -> (variant {Ok:record {id:text; title:text; listOfResponseAnswer:vec text; userId:principal; createdAt:nat64; updateAt:nat64; formId:text}; Err:variant {Fail:text; NotFound:text; Succes:text}});
-    addForm: (record {keyAnswer:vec vec text; title:text; typeOfQuestion:vec text; contents:vec text; userId:principal; description:text; choice:vec vec text; answerType:vec bool; numberOfQuestion:nat64}) -> (variant {Ok:record {id:text; listOfQuestion:vec text; title:text; createdAt:nat64; description:text; updateAt:nat64; listOfResponse:vec text; numberOfQuestion:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}});
-    createUser: (text) -> (variant {Fail:text; NotFound:text; Succes:text});
-    deleteAnswerWithId: (text) -> (variant {Fail:text; NotFound:text; Succes:text});
+    addForm: (record {keyAnswer:vec vec text; title:text; typeOfQuestion:vec text; contents:vec text; userId:principal; description:text; pageIndex:vec nat64; choice:vec vec text; answerType:vec bool; numberOfQuestion:nat64}) -> (variant {Ok:record {id:text; title:text; userId:principal; createdAt:nat64; description:text; updateAt:nat64; numberOfQuestion:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}});
+    addFormResponse: (record {title:text; listOfResponseAnswer:vec vec text; userId:principal; formId:text}) -> (variant {Ok:record {id:text; title:text; userId:principal; createdAt:nat64; updateAt:nat64; formId:text}; Err:variant {Fail:text; NotFound:text; Succes:text}});
+    createUser: (record {id:principal; name:text}) -> (variant {Fail:text; NotFound:text; Succes:text});
+    deleteFormResponseWithId: (text) -> (variant {Fail:text; NotFound:text; Succes:text});
+    deleteFormResponseWithUserId: (text) -> (variant {Fail:text; NotFound:text; Succes:text});
     deleteFormWithId: (text) -> (variant {Fail:text; NotFound:text; Succes:text});
-    getAllForm: () -> (vec record {id:text; listOfQuestion:vec text; title:text; createdAt:nat64; description:text; updateAt:nat64; listOfResponse:vec text; numberOfQuestion:nat64}) query;
-    getAllUser: () -> (vec record {id:principal; userName:text; createdAt:nat64; listOfAnswer:vec text; listOfForm:vec text}) query;
-    getAnsweerFromUser: (principal) -> (variant {Ok:vec record {id:text; title:text; listOfResponseAnswer:vec text; userId:principal; createdAt:nat64; updateAt:nat64; formId:text}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
-    getAnswerIndexFromId: (text, int64) -> (variant {Ok:record {id:text; content:vec text; createdAt:nat64; updateAt:nat64; index:nat64; answerType:text}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
-    getAnswerWithId: (text) -> (variant {Ok:record {id:text; title:text; listOfResponseAnswer:vec text; userId:principal; createdAt:nat64; updateAt:nat64; formId:text}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
-    getFormFromUser: (principal) -> (variant {Ok:vec record {id:text; listOfQuestion:vec text; title:text; createdAt:nat64; description:text; updateAt:nat64; listOfResponse:vec text; numberOfQuestion:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
-    getFormWithId: (text) -> (variant {Ok:record {id:text; listOfQuestion:vec text; title:text; createdAt:nat64; description:text; updateAt:nat64; listOfResponse:vec text; numberOfQuestion:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
-    getQuestionIndexFromId: (text, int64) -> (variant {Ok:record {id:text; keyAnswer:vec text; typeOfQuestion:text; needAnswer:bool; index:nat64; choice:vec text}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
-    getUserById: (principal) -> (variant {Ok:record {id:principal; userName:text; createdAt:nat64; listOfAnswer:vec text; listOfForm:vec text}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getAllForm: () -> (vec record {id:text; title:text; userId:principal; createdAt:nat64; description:text; updateAt:nat64; numberOfQuestion:nat64}) query;
+    getAllFormResponse: () -> (vec record {id:text; title:text; userId:principal; createdAt:nat64; updateAt:nat64; formId:text}) query;
+    getAllFormResponseWithFormId: (text) -> (variant {Ok:vec record {id:text; title:text; userId:principal; createdAt:nat64; updateAt:nat64; formId:text}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getAllFormResponseWithUserId: (principal) -> (variant {Ok:vec record {id:text; title:text; userId:principal; createdAt:nat64; updateAt:nat64; formId:text}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getAllFormWithUserId: (principal) -> (variant {Ok:vec record {id:text; title:text; userId:principal; createdAt:nat64; description:text; updateAt:nat64; numberOfQuestion:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getAllQuestionChoiceWithQuestionId: (text) -> (variant {Ok:vec record {id:text; content:text; questionId:text; index:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getAllUser: () -> (vec record {id:principal; userName:text; createdAt:nat64}) query;
+    getAnswerWithFormRespondId: (text) -> (variant {Ok:vec record {id:text; content:text; index:nat64; responseId:text}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getFormResponseWithId: (text) -> (variant {Ok:record {id:text; title:text; userId:principal; createdAt:nat64; updateAt:nat64; formId:text}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getFormWithId: (text) -> (variant {Ok:record {id:text; title:text; userId:principal; createdAt:nat64; description:text; updateAt:nat64; numberOfQuestion:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getQuestionWithFormId: (text) -> (variant {Ok:vec record {id:text; content:text; typeOfQuestion:text; needAnswer:bool; pageIndex:nat64; index:nat64; formId:text}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
+    getUserById: (principal) -> (variant {Ok:record {id:principal; userName:text; createdAt:nat64}; Err:variant {Fail:text; NotFound:text; Succes:text}}) query;
     greet: (text) -> (text) query;
-    updateUser: (record {id:principal; userName:text; createdAt:nat64; listOfAnswer:vec text; listOfForm:vec text}) -> (variant {Fail:text; NotFound:text; Succes:text});
+    updateUser: (record {id:principal; userName:text; createdAt:nat64}) -> (variant {Fail:text; NotFound:text; Succes:text});
 }

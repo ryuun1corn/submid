@@ -1,19 +1,23 @@
 import { ModeToggle } from '@/components/mode-toggle';
-import { ChevronsLeft } from 'lucide-react';
+import { HomeIcon } from 'lucide-react';
 import { Link, Outlet } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import UserInfo from './components/elements/UserInfo/UserInfo';
 
 function App() {
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center gap-5">
-      <div className="absolute top-10 flex flex-row items-center justify-between w-full px-10">
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-950 flex flex-col items-center justify-center gap-5 pt-32 pb-20">
+      <nav className="absolute top-0 flex flex-row items-center justify-between w-full py-10 px-5 md:px-10">
         <Button asChild variant="outline">
           <Link to={'/'}>
-            <ChevronsLeft className="h-4 w-4" />
+            <HomeIcon className="h-6 w-6" />
           </Link>
         </Button>
-        <ModeToggle />
-      </div>
+        <div className="flex flex-row gap-2">
+          <UserInfo />
+          <ModeToggle />
+        </div>
+      </nav>
       <Outlet />
     </main>
   );

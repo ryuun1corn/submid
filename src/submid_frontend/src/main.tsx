@@ -4,10 +4,15 @@ import App from './App.tsx';
 import './index.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import NotFoundModule from './components/modules/NotFoundModule/index.tsx';
-import CreateFormModule from './components/modules/CreateFormModule/index.tsx';
-import HomepageModule from './components/modules/HomepageModule/index.tsx';
-import AboutModule from './components/modules/AboutModule/index.tsx';
+import NotFoundModule from './modules/NotFoundModule/index.tsx';
+import CreateFormModule from './modules/CreateFormModule/index.tsx';
+import HomepageModule from './modules/HomepageModule/index.tsx';
+import AboutModule from './modules/AboutModule/index.tsx';
+import SeeUserForm from './modules/UserFormsModule/index.tsx';
+import FillFormModule from './modules/FillFormModule/index.tsx';
+import { AuthContextProvider } from './components/contexts/UseAuthContext/index.tsx';
+import { Toaster } from './components/ui/sonner.tsx';
+import SeeFormResponse from './modules/SeeFormResponseModule/index.tsx';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +32,18 @@ const router = createBrowserRouter([
         path: '/about',
         element: <AboutModule />,
       },
+      {
+        path: '/fill',
+        element: <FillFormModule />,
+      },
+      {
+        path: '/forms',
+        element: <SeeUserForm />,
+      },
+      {
+        path: '/forms/:id',
+        element: <SeeFormResponse />,
+      },
     ],
   },
 ]);
@@ -34,7 +51,10 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <RouterProvider router={router} />
+      <AuthContextProvider>
+        <RouterProvider router={router} />
+      </AuthContextProvider>
+      <Toaster />
     </ThemeProvider>
   </React.StrictMode>,
 );
